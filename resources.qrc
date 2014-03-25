@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/timestepselector" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
