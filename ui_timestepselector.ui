@@ -37,6 +37,38 @@
         
        </widget>
       </item>
+      <item >
+       <widget class="QSlider" name="horizontalTimeSlider">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>12</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelStartTime">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>18</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>not set</string>
+        </property>
+       </widget>
+      </item>
  </layout>
  </widget>
  <resources/>

@@ -38,6 +38,7 @@ class TimestepSelector:
         self.iface = iface
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
+        self.layerlist=[]
         # initialize locale
         locale = QSettings().value("locale/userLocale")[0:2]
         localePath = os.path.join(self.plugin_dir, 'i18n', 'timestepselector_{}.qm'.format(locale))
@@ -51,11 +52,16 @@ class TimestepSelector:
 
         # Create the dialog (after translation) and keep reference
         self.dlg = TimestepSelectorDialog()
-        	
         for layer in self.iface.legendInterface().layers():
-            iface.messageBar().pushMessage("Type",layer.name(), level=1, duration=10)
-            if type(layer) is QgsRasterLayer:
+            # iface.messageBar().pushMessage("Type",layer.name(), level=1, duration=10)
+            if type(layer) is QgsRasterLayer and layer.bandCount()>1:
+                self.layerlist.append(layer)
                 self.dlg.comboBoxLayer.addItem(layer.name())
+        # Sets an event handler on the combobox:
+        self.dlg.comboBoxLayer.currentIndexChanged.connect(self.getLayerAttributes)
+        self.dlg.horizontalTimeSlider.sliderMoved.connect(self.sliderMoved)
+        # Initializes 
+        self.getLayerAttributes(0)
             
 
     def initGui(self):
@@ -86,3 +92,18 @@ class TimestepSelector:
             # do something useful (delete the line containing pass and
             # substitute with your code)
             pass
+    
+    # Eventhandler on layer list combo box:
+    def getLayerAttributes(self,comboIndex):
+        self.activeLayer=self.layerlist[comboIndex]
+        bcnt=self.activeLayer.bandCount()
+        
+        #iface.messageBar().pushMessage("N bands:",bcnt, level=1, duration=10)
+        self.dlg.horizontalTimeSlider.setMaximum(bcnt)
+    #    self.dlg.labelStartTime.setText(str(bcnt))
+        
+    def sliderMoved(self,sldValue):
+        self.dlg.labelStartTime.setText(str(sldValue))
+        self.activeLayer.setGrayBandName(self.activeLayer.bandName(sldValue))
+        self.activeLayer.triggerRepaint()
+
