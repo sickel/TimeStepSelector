@@ -52,16 +52,9 @@ class TimestepSelector:
 
         # Create the dialog (after translation) and keep reference
         self.dlg = TimestepSelectorDialog()
-        for layer in self.iface.legendInterface().layers():
-            # iface.messageBar().pushMessage("Type",layer.name(), level=1, duration=10)
-            if type(layer) is QgsRasterLayer and layer.bandCount()>1:
-                self.layerlist.append(layer)
-                self.dlg.comboBoxLayer.addItem(layer.name())
         # Sets an event handler on the combobox:
         self.dlg.comboBoxLayer.currentIndexChanged.connect(self.getLayerAttributes)
         self.dlg.horizontalTimeSlider.sliderMoved.connect(self.sliderMoved)
-        # Initializes 
-        self.getLayerAttributes(0)
             
 
     def initGui(self):
@@ -83,6 +76,16 @@ class TimestepSelector:
 
     # run method that performs all the real work
     def run(self):
+        layers=self.iface.legendInterface().layers()
+        # Shold be moved somewhere else, this is only initiating when plugin is loaded.
+        if len(layers) >0:
+            for layer in layers:
+                # iface.messageBar().pushMessage("Type",layer.name(), level=1, duration=10)
+                if type(layer) is QgsRasterLayer and layer.bandCount()>1:
+                    self.layerlist.append(layer)
+                    self.dlg.comboBoxLayer.addItem(layer.name())
+        # Initializes 
+        self.getLayerAttributes(0)
         # show the dialog
         self.dlg.show()
         # Run the dialog event loop
@@ -103,7 +106,7 @@ class TimestepSelector:
     #    self.dlg.labelStartTime.setText(str(bcnt))
         
     def sliderMoved(self,sldValue):
-        self.dlg.labelStartTime.setText(str(sldValue))
-        self.activeLayer.setGrayBandName(self.activeLayer.bandName(sldValue))
+        self.dlg.labelStartTime.setText(self.activeLayer.bandName(sldValue))
+        # self.activeLayer.setGrayBandName(self.activeLayer.bandName(sldValue))
         self.activeLayer.triggerRepaint()
 
