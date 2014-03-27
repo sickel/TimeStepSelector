@@ -20,7 +20,7 @@ Not much - just lists coverages with potentially may be animated.
 For an example, use test_4layers.nc. Add it as a raster file. On Style, select Render type "Singleband gray", 
 select any band as the Gray Band. Set Min to 0 and Max to 0.9 and Strech and clip to MinMax. A quasi-random grid 
 should show up. By selecting different Gray bands, different time steps are show - ultimately, they should be 
-selected using a slider in the pluginwindow-
+selected using a slider in the pluginwindow. (Band 1 and 3 are equal as are band 2 and 4)
 
 ## License
 

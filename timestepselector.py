@@ -78,6 +78,8 @@ class TimestepSelector:
     def run(self):
         layers=self.iface.legendInterface().layers()
         # Shold be moved somewhere else, this is only initiating when plugin is loaded.
+        self.layerlist=[]
+        #self.dlg.comboBoxLayer.clear()
         if len(layers) >0:
             for layer in layers:
                 # iface.messageBar().pushMessage("Type",layer.name(), level=1, duration=10)
@@ -100,13 +102,14 @@ class TimestepSelector:
     def getLayerAttributes(self,comboIndex):
         self.activeLayer=self.layerlist[comboIndex]
         bcnt=self.activeLayer.bandCount()
-        
+        #rndr=self.activeLayer.renderer()
+        #self.activeLayer.renderer=rndr  
         #iface.messageBar().pushMessage("N bands:",bcnt, level=1, duration=10)
         self.dlg.horizontalTimeSlider.setMaximum(bcnt)
     #    self.dlg.labelStartTime.setText(str(bcnt))
         
     def sliderMoved(self,sldValue):
         self.dlg.labelStartTime.setText(self.activeLayer.bandName(sldValue))
-        # self.activeLayer.setGrayBandName(self.activeLayer.bandName(sldValue))
+        self.activeLayer.renderer.setGrayBand(sldValue)
         self.activeLayer.triggerRepaint()
 
